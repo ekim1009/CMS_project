@@ -3,13 +3,31 @@
 <div>
   <ul>
     <% @files.each do |file| %>
-      <li>
+      <li class="home_page">
         <a href="/<%= file %>"><%= file %></a>
         <button><a href="/<%= file %>/edit">edit</a></button>
+        
+        <form class="inline" action="/<%= file %>/delete" method="post">
+          <button type="submit">Delete</button>
+        </form>
       </li>
     <% end %>
   </ul>
 </div>
+
+<div>
+  <a href="/new" class="home_page_buttons">New Document</a>
+</div>
+
+  <% if session[:username] %>
+    <form class="inline" action="/user/signout" method="post">
+      <p class="status">Signed in as <%= session[:username] %></p>
+      <button type="submit" class="home_page_buttons">Sign Out</button>
+    </form>
+  <% else %>
+    <button class="home_page_buttons"><a href="/users/signin">Sign In</a></button> 
+  <% end %>
+
 
 
 

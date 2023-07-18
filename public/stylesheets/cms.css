@@ -1,0 +1,32 @@
+body {
+  font-family: sans-serif;
+  padding: 10px;
+}
+
+.display_message {
+  background-color: yellow;
+  padding: 8px;
+}
+
+.inline{ 
+  display: inline;
+}
+
+.signin {
+  box-sizing: border-box;
+  padding: 3px;
+}
+
+.home_page_buttons {
+  display: block;
+  margin: 10px 0;
+}
+
+.signed_in_message {
+  display: inline;
+  font-style: italic; 
+}
+
+.signed_in_button {
+  display: inline;
+}

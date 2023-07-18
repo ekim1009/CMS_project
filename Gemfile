@@ -9,6 +9,7 @@ gem "rack-test"
 gem 'minitest', '~> 5.10'
 gem 'minitest-reporters', '~> 1.1'
 gem 'redcarpet'
+gem "bcrypt"
 
 group :production do
   gem "puma"

@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>CMS</title>
+    <title><%= @filename %></title>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="/stylesheets/cms.css" type="text/css">
   </head>
-
+  
   <body>
     <% if session[:message] %>
       <div>
-        <p><%= session.delete(:message) %></p>
+        <p class="display_message"><%= session.delete(:message) %></p>
       </div>
     <% end %>
-    
-    <main>
-      <%= yield %>
-    </main>
-    
+    <% if session[:signed_out_message] %>
+      <div>
+        <p class="display_message"><%= session.delete(:signed_out) %></p>
+      </div>
+    <% end %>
+    <%= yield %>
   </body>
 </html>
