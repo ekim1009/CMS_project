@@ -1,0 +1,15 @@
+<form action="/users/createaccount" method="post">
+  <div class="create_account">
+    <label for="username">Username:</label>
+    <input id="username" name="username" placeholder="username" value="<%= params[:username] %>">
+  </div>
+  <div class="create_account">
+    <label for="password">Password:</label>
+    <input id="password" name="password" placeholder="Password" value="<%= params[:password] %>">
+  </div>
+  <div class="create_account">
+    <label for="retype_password">Retype the Password:</label>
+    <input id="retype_password" name="retype_password" placeholder="Password" value="<%= params[:password] %>">
+  </div>
+  <button type="submit">Create An Account</button>
+</form>

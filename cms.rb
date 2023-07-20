@@ -33,7 +33,7 @@ def load_user_credentials
   else
     File.expand_path("../users.yml", __FILE__)
   end
-  YAML.load_file("users.yml")
+    YAML.load_file("users.yml")
 end
 
 def data_path
@@ -104,7 +104,7 @@ get "/:filename/edit" do
 end
 
 def valid_input(text)
-  text.strip.size >= 1 ? true : false
+  text[-4..-1] == ".txt" || text[-3..-1] == ".md" ? true : false
 end
 
 # creating a new document
@@ -118,7 +118,7 @@ post "/new" do
     session[:message] = "#{params[:filename]} was created."
     redirect "/"
   else
-    session[:message] = "A name is required."
+    session[:message] = "Only '.txt' and '.md' files are supported."
     status 422
     erb :new, layout: :layout
   end
@@ -146,6 +146,67 @@ post "/:filename/delete" do
   
   session[:message] = "#{params[:filename]} has been deleted."
   redirect "/"
+end
+
+def duplicate_filename(string)
+  if string[-4..-1] == ".txt"
+    string.insert(-5, "_dup")
+  else 
+    string.insert(-4, "_dup")
+  end
+end
+
+
+# make a duplicate of a file
+post "/:filename/duplicate" do
+  require_sign_in
+  
+  file_path = File.join(data_path, params[:filename])
+  content = File.read(file_path)
+  new_filename = duplicate_filename(params[:filename])
+  new_file = File.join(data_path, new_filename)
+ 
+
+  File.new(new_file, "w")
+  File.write(new_file, content)
+  
+  session[:message] = "A duplicate called #{new_filename} was created."
+  redirect "/"
+end
+
+# create an account page
+get "/users/createaccount" do
+  erb :createaccount, layout: :layout
+end
+
+def password_match(str1, str2)
+  str1 == str2 
+end
+
+def valid_username(str)
+  str.strip.size > 1
+end
+
+# creating a new account
+post "/users/createaccount" do
+  username = params[:username]
+  password = params[:password]
+  retype_password = params[:retype_password]
+  if !valid_username(username) 
+    session[:message] = "You must input a valid username"
+    status 422
+    erb :createaccount, layout: :layout
+  elsif !password_match(password, retype_password)
+    session[:message] = "The passwords need to match"
+    status 422
+    erb :createaccount, layout: :layout
+  else
+    session[:message] = "Your account has been created"
+    data = YAML.load_file("users.yml")
+    data[username] = password
+    File.open("users.yml", 'w') { |f| YAML.dump(data, f) }
+    redirect "/"
+  end
 end
 
 # sign in page
