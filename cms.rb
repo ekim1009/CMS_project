@@ -72,14 +72,17 @@ get "/:filename" do
 end
 
 def valid_credentials?(username, password)
-  credentials = load_user_credentials
+  # credentials = load_user_credentials
 
-  if credentials.key?(username)
-    bcrypt_password = BCrypt::Password.create(credentials[username])
-    bcrypt_password == password
-  else
-    false
-  end
+  # if credentials.key?(username)
+  #   bcrypt_password = BCrypt::Password.create(password)
+  #   bcrypt_password == password
+  # else
+  #   false
+  # end
+  credentials = load_user_credentials
+  bcrypt_password = BCrypt::Password.create(password)
+  credentials.key?(username) && bcrypt_password == password
 end
 
 def user_signed_in?
@@ -202,9 +205,10 @@ post "/users/createaccount" do
     erb :createaccount, layout: :layout
   else
     session[:message] = "Your account has been created"
+    encrypt_password = BCrypt::Password.create(params[:password]).to_s
     data = YAML.load_file("users.yml")
-    data[username] = password
-    File.open("users.yml", 'w') { |f| YAML.dump(data, f) }
+    data[username] = encrypt_password
+    File.open("users.yml", 'w') { |f| YAML.dump(data, f) } 
     redirect "/"
   end
 end
